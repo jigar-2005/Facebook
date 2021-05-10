@@ -1,0 +1,69 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<!-- style only for friend request page -->
+<style>
+    #myDiv2 {
+        border-bottom: thick solid blue;
+    }
+
+    #myDiv1 {
+        border-bottom: thick solid white;
+    }
+
+    #myDiv3 {
+        border-bottom: thick solid white;
+    }
+
+    #myDiv4 {
+        border-bottom: thick solid white;
+    }
+
+    #myDiv5 {
+        border-bottom: thick solid white;
+    }
+
+    .show_request img {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin: 0 1rem 0 0;
+    }
+
+    @media (min-width: 992px) {
+        .show_card {
+            padding-left: 20%;
+            padding-right: 20%;
+        }
+    }
+</style>
+
+<!-- card for showing friend request -->
+<div class="container-md mt-5 show_card">
+    <div class="p-3 show_request" style="background-color: white; box-shadow: 0 0 4px 0 rgb(212, 212, 212);">
+        <h4 class="mb-3">{{friend_request_detail|length}} Friend Requests</h4>
+        <hr>
+        {% if friend_request_detail %}{% for friend_request_detail in friend_request_detail %}
+        <img class="rounded-circle account-img" width="5px" height="5px"
+            src="/static/profile_image/{{friend_request_detail.profile_image}}">
+        <h6><a href='/username/{{friend_request_detail.id}}'
+                style="text-decoration: none; color: #000; font-size: 18px;">{{friend_request_detail.firstname}}
+                {{friend_request_detail.lastname}}</a>
+            <span style="float: right;">{{friend_request_detail.request_sent_date.strftime('%Y-%m-%d')}}</span>
+        </h6>
+        9 mutual friends <br>
+        <a href="/accept_friend_request/{{friend_request_detail.id}}" role="button" class="btn btn-primary btn-inline"
+            style="margin-left: -10px;">Confirm</a>
+        <a href="/block_friend_request/{{friend_request_detail.id}}" role="button" class="btn btn-inline"
+            style="background: #d8d8d8;">Block</a>
+        <hr>
+        {%endfor%}
+        {% else %}
+        <br>
+        <div class="col-12 text-center">
+            <h4>You have no friend request</h4>
+        </div><br>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

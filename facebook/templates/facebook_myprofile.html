@@ -1,0 +1,256 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<!-- style only for myprofile page -->
+<style>
+    .cover {
+        background-image: url("/static/cover_image/{{myname.cover_image}}");
+        background-repeat: no-repeat;
+        background-attachment: cover;
+        background-size: 100% auto;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    #mymenu1 {
+        border-bottom: thick solid blue;
+    }
+
+    .block img {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin: 0 1rem 0 0;
+    }
+
+    .profile-block img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin: -10px 1rem 0 0;
+    }
+
+    .post-user-profile img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin: 0px 1rem 0 0;
+    }
+
+    .img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .profile {
+        margin-top: 22%;
+        border-radius: 100%;
+        border: 5px solid white;
+    }
+
+    .user_post_comment {
+        width: 90%;
+        border: 1px solid #e6e7e9;
+        background: #F0F2F5;
+        border-radius: 15px;
+        font-size: 17px;
+        height: 40px;
+    }
+
+    .user_add_post {
+        width: 90%;
+        border: 1px solid #e6e7e9;
+        background: #F0F2F5;
+        border-radius: 15px;
+        font-size: 17px;
+        height: 40px;
+    }
+
+    @media (max-width: 550px) {
+        .user_post_comment {
+            width: 90%;
+            float: right;
+        }
+
+        .user_add_post {
+            width: 90%;
+            float: right;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .cover-profile {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .user_all_post {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+</style>
+
+<!-- for showing cover image, profile image and username and some menu type options -->
+<div style="background-color: #CAC2BB;">
+    <div class="container-md cover-profile">
+        <div class="cover">
+            <a href="/static/profile_image/{{myname.profile_image}}">
+                <img class="profile" src="/static/profile_image/{{myname.profile_image}}" width="180px"
+                    height="180px"></a>
+        </div>
+        <h1 class="username text-center mb-4">{{myname.firstname}} {{myname.lastname}}</h1>
+        <hr>
+        <a href="/myprofile" id="mymenu1" class="btn profile_menu_btn1" onclick="Function1()"><b>Post</b></a>
+        <a href="/myabout" id="mymenu2" class="btn profile_menu_btn2" onclick="Function2()"><b>About</b></a>
+        <a href="{{url_for('friends.myfriends')}}" id="mymenu3" class="btn profile_menu_btn3"
+            onclick="Function3()"><b>Friends</b></a>
+        <a href="/editprofile" style="float: right;" class="btn btn-secondary profile_menu_btn5 mx-2">Edit Profile</a>
+    </div>
+</div>
+
+<br>
+
+<div class="container-md user_all_post">
+    <!-- card for shoing livebtn, photobtn, feeeingbtn -->
+    <div class="card" style="border-radius: 10px;">
+        <div class="card-body">
+            <div>
+                <img class="img" src="/static/profile_image/{{myname.profile_image}}" />
+                <input class="user_add_post" type="text" placeholder="What's on your mind, {{myname.firstname}}?"
+                    data-toggle="modal" data-target="#exampleModalCenter">
+            </div>
+            <!-- Add Post Modal -->
+            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Create Post</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="POST" action="/addpost">
+                            <div class="modal-body">
+                                <textarea maxlength="180" rows="6" name="postdescription"
+                                    placeholder="What's on your mind, {{myname.firstname}}?"
+                                    style="font-size: 24px; width: 100%;"></textarea>
+                                <li class="list-group-item"><b>Add image </b> <input type="file" name="postimage"
+                                        style="float: right; border: 1px solid black;"></li>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Post</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <a href="#live_btn" class="col-4 text-center live_btn py-2"><button
+                        style="border: none; background: transparent;">🎥 <span class="live_btn_text">Live
+                            Video</span></button></a>
+                <a href="#photo_video_btn" class="col-4 text-center photo_video_btn py-2"><button
+                        style="border: none; background: transparent;">🖼️ <span
+                            class="photo_video_btn_text">Photos/Video</span></button></a>
+                <a href="#feelings_btn" class="col-4 text-center feelings_btn py-2"><button
+                        style="border: none; background: transparent;">😂 <span
+                            class="feelings_btn_text">Feelings/Activity</span></button></a>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <!-- card for showing myposts -->
+    {% for my_post in my_post %}
+    <div class="card" style="border-radius: 10px;">
+        <div class="card-body">
+            <div class="post-user-profile">
+                <img class="rounded-circle post-user" src="/static/profile_image/{{my_post.User.profile_image}}">
+                <h6><a href='/username/{{my_post.User.id}}'
+                        style="text-decoration: none; color: #000; font-size: 18px;">{{my_post.User.firstname}}
+                        {{my_post.User.lastname}}</a>
+                </h6>
+                <p style="margin-top: -7px;">{{my_post.Post.date_posted.strftime('%Y-%m-%d')}}</p>
+                <a href="/post_with_like/{{my_post.Post.id}}" style="text-decoration: none; color: #000;">
+                    <p>{{my_post.Post.post_description}}</p>
+                </a>
+            </div>
+            {% if my_post.Post.post_image != "none" %}
+            <a href="/post_with_like/{{my_post.Post.id}}"><img
+                    src="/static/post_image_folder/{{my_post.Post.post_image}}" width="100%" height="auto"></a>
+            {% endif %}
+            <div>
+                <div class="row">
+                    <div class="col-6" style="float: left;">
+                        <h6 style="margin-top: 10px;"><a href="/post_with_like/{{my_post.Post.id}}"
+                                style="text-decoration: none; color: #000;">
+                                {% for like_count in like_count %}
+                                {% if like_count.id == my_post.Post.id %}
+                                🥰❤️🥰【{{like_count[1]}}】
+                                {% endif %}
+                                {% endfor %}
+                            </a>
+                        </h6>
+                    </div>
+                    <div class="col-6" style="float: right;">
+                        <h6><a href="/post_with_comment/{{my_post.Post.id}}"
+                                style="text-decoration: none; color: #000; float: right;">
+                                {% for comment_count in comment_count %}
+                                {% if comment_count.id == my_post.Post.id %}
+                                【{{comment_count[1]}}】Comment
+                                {% endif %}
+                                {% endfor %}
+                            </a>
+                        </h6>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <a href="/like{{my_post.Post.id}}" class="col-4 text-center reaction" role="button" style="border: none; text-decoration: none; color: black;
+                        {% for like_exists in like_exists %}
+                            {% if like_exists.Post.id == my_post.Post.id %}
+                            background: blue; color: white;
+                            {% endif %}
+                            {% endfor %}"><i class="fa fa-thumbs-o-up" style="font-size: 18px;"></i> Like</a>
+                    <a href="/post_with_comment/{{my_post.Post.id}}" class="col-4 text-center reaction" role="button"
+                        style="border: none; text-decoration: none; color: black;"><i class="fa fa-edit"
+                            style="font-size: 18px;"></i> Comment</a>
+                    <a href="#share" class="col-4 text-center reaction" role="button"
+                        style="border: none; text-decoration: none; color: black;"><i class="fa fa-share-square-o"
+                            style="font-size: 18px;"></i> Share</a>
+                </div>
+                <hr>
+                <div>
+                    <form method="POST" action="/post/{{my_post.Post.id}}/comment">
+                        <img class="img" src="/static/profile_image/{{myname.profile_image}}" />
+                        <input class="user_post_comment" name="comment_data" autofocus="autofocus" type="text"
+                            placeholder="Write a comment...">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+</div>
+
+<!-- js for changing borderbottom of menu when clicked -->
+<script>
+    function Function1() {
+        document.getElementById("mymenu1").style.borderBottom = "thick solid blue";
+        document.getElementById("mymenu2").style.borderBottom = "#CAC2BB";
+        document.getElementById("mymenu3").style.borderBottom = "#CAC2BB";
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+{% endblock %}

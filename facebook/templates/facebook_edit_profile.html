@@ -1,0 +1,85 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<div class="container-md">
+    <!-- left sidebar for showing general setting page, change password page and block user show page -->
+    <div class="row" style="overflow-x: auto;">
+        <div class="col-md-3 mt-3" style="border-right: 1px solid black;">
+            <h3><b>Settings</b></h3><br>
+            <a href="/setting"
+                style="background: #d8d8d8; text-decoration: none; color: black; font-weight: 600; border-radius: 10px; width: 100%;"
+                class="left_menu_1 pt-2 pb-2 px-2"><i class="fa fa-cog"
+                    style="font-size:18px"></i>&nbsp;&nbsp;General&emsp;&emsp;&nbsp;&nbsp;</a><br><br>
+            <a href="/change_password"
+                style="text-decoration: none; color: black; font-weight: 600; border-radius: 10px; width: 100%;"
+                class="left_menu_1 pt-2 pb-2 px-2"><i class="fa fa-shield"
+                    style="font-size:18px"></i>&nbsp;&nbsp;Security&emsp;&emsp;&nbsp; </a><br><br>
+            <a href="{{url_for('friends.block_user')}}"
+                style="text-decoration: none; color: black; font-weight: 600; border-radius: 10px; width: 100%;"
+                class="left_menu_1 pt-2 pb-2"><span class="fa-stack">
+                    <i class="fa fa-user fa-stack-1x"></i>
+                    <i class="fa fa-ban fa-stack-2x"></i></span>&nbsp;&nbsp;Block User&emsp;</a>
+            <hr>
+        </div>
+
+        <!-- form for editing my details -->
+        <div class="col-md-9 mt-3">
+            <h3><b>General Account Settings</b></h3><br>
+            <div class="text-center"
+                style="background: url('/static/cover_image/{{current_user.cover_image}}'); background-repeat: no-repeat; background-attachment: cover; background-size: 100% auto;">
+                <img src="/static/profile_image/{{current_user.profile_image}}" alt="" width="200" height="200"
+                    style="margin-top: 22%; border-radius: 100%; border: 5px solid white;">
+            </div>
+            <form method="POST" action="/update_profile" enctype="multipart/form-data">
+                <div class="form-group row mt-3">
+                    <label for="inputprofileimage3" class="col-sm-3 col-form-label"><b>Change profile</b></label>
+                    <div class="col-sm-9">
+                        <input type="file" class="form-control" id="inputprofileimage3" name="profile_image">
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="inputcoverimage3" class="col-sm-3 col-form-label"><b>Change Cover image</b></label>
+                    <div class="col-sm-9">
+                        <input type="file" class="form-control" id="inputcoverimage3" name="cover_image">
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="inputfirstname3" class="col-sm-3 col-form-label"><b>First Name</b></label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputfirstname3" placeholder="First Name"
+                            name="firstname" value="{{current_user.firstname}}">
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="inputlastname3" class="col-sm-3 col-form-label"><b>Last Name</b></label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="inputlastname3" placeholder="Last Name"
+                            name="lastname" value="{{current_user.lastname}}">
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="inputemail3" class="col-sm-3 col-form-label"><b>Email</b></label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" id="inputemail3" placeholder="facebook@gmail.com"
+                            name="email" value="{{current_user.email}}">
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <label for="inputdob3" class="col-sm-3 col-form-label"><b>Date of birth</b></label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" id="inputdob3" name="date_of_birth"
+                            value="{{current_user.date_of_birth}}">
+                    </div>
+                </div>
+                <div class="form-group row mt-3">
+                    <div class="col-sm-12">
+                        <button type="submit" style="width: 100%;" class="btn btn-primary">Change</button>
+                    </div>
+                </div>
+            </form>
+            <hr>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

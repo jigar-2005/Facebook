@@ -1,0 +1,86 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<style>
+    .post-user-profile img {
+        width: 50px;
+        height: 50px;
+        float: left;
+        margin: 0px 1rem 0 0;
+    }
+</style>
+
+<div class="container-xl" style="margin-top: 100px;">
+    <div class="row">
+        <div class="col-lg-8 view_image">
+            {% if post_detail.Post.post_image != "none" %}
+            <img src="/static/post_image_folder/{{post_detail.Post.post_image}}" alt="#"
+                style="height: auto; width: 100%;">
+            {% else %}
+            <div class="card" style="border-radius: 10px; height: auto; width: 100%; margin-top: 20px;">
+                <div class="card-body text-center">
+                    <h4>{{post_detail.Post.post_description}}</h4>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-4">
+            <br>
+            <a href='/username/{{post_detail.User.id}}' style="text-decoration: none; color: #000;">
+                <div class="post-user-profile">
+                    <img class="rounded-circle post-user" src="{{ url_for('static', filename=profile_img) }}">
+                    <h6><a href='/username/{{post_detail.User.id}}'
+                            style="text-decoration: none; color: #000; font-size: 18px;">{{post_detail.User.firstname}}
+                            {{post_detail.User.lastname}}</a></h6>
+                    <p style="margin-top: -7px;">{{post_detail.Post.date_posted.strftime('%Y-%m-%d')}}</p>
+                    <p>{{post_detail.Post.post_description}}</p>
+                    <div class="row">
+                        <div class="col-6" style="float: left;">
+                            <h6 style="margin-top: 10px;"><a href="/post_with_like/{{post_detail.Post.id}}"
+                                    style="text-decoration: none; color: #000;">
+                                    {% for like_count in like_count %}
+                                    {% if like_count.id == post_detail.Post.id %}
+                                    🥰❤️🥰【{{like_count[1]}}】
+                                    {% endif %}
+                                    {% endfor %}
+                                </a>
+                            </h6>
+                        </div>
+                        <div class="col-6" style="float: right;">
+                            <h6><a href="/post_with_comment/{{post_detail.Post.id}}"
+                                    style="text-decoration: none; color: #000; float: right;">
+                                    {% for comment_count in comment_count %}
+                                    {% if comment_count.id == post_detail.Post.id %}
+                                    【{{comment_count[1]}}】Comment
+                                    {% endif %}
+                                    {% endfor %}
+                                </a>
+                            </h6>
+                        </div>
+                    </div>
+                    <ol class="list-group list-group-numbered">
+                        {% if user_comment_detail %}
+                        {% for user_comment_detail in user_comment_detail %}
+                        <li class="list-group-item d-flex justify-content-between align-items-start mb-2">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold"><a href='/username/{{user_comment_detail.id}}'
+                                        style="text-decoration: none; color: #000; font-size: 18px;">{{user_comment_detail.firstname}}
+                                        {{user_comment_detail.lastname}}</a>
+                                </div>
+                                <p>{{user_comment_detail.comment}}</p>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li class="list-group-item d-flex mb-2">
+                            <h4>-- No one like the post --</h4>
+                        </li>
+                        {% endif %}
+                    </ol>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<!-- style only for friend request page -->
+<style>
+    .show_request img {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin: 0 1rem 0 0;
+    }
+
+    @media (min-width: 992px) {
+        .show_card {
+            padding-left: 20%;
+            padding-right: 20%;
+        }
+    }
+</style>
+
+<div class="container-md">
+    <!-- left sidebar for showing general setting page, change password page and block user show page -->
+    <div class="row" style="overflow-x: auto;">
+        <div class="col-md-3 mt-3" style="border-right: 1px solid black;">
+            <h3><b>Settings</b></h3><br>
+            <a href="/setting"
+                style="text-decoration: none; color: black; font-weight: 600; border-radius: 10px; width: 100%;"
+                class="left_menu_1 pt-2 pb-2 px-2"><i class="fa fa-cog"
+                    style="font-size:18px"></i>&nbsp;&nbsp;General&emsp;&emsp;&nbsp;&nbsp;</a><br><br>
+            <a href="/change_password"
+                style="text-decoration: none; color: black; font-weight: 600; border-radius: 10px; width: 100%;"
+                class="left_menu_1 pt-2 pb-2 px-2"><i class="fa fa-shield"
+                    style="font-size:18px"></i>&nbsp;&nbsp;Security&emsp;&emsp;&nbsp; </a><br><br>
+            <a href="{{url_for('friends.block_user')}}"
+                style="background: #d8d8d8; text-decoration: none; color: black; font-weight: 600; border-radius: 10px; width: 100%;"
+                class="left_menu_1 pt-2 pb-2"><span class="fa-stack">
+                    <i class="fa fa-user fa-stack-1x"></i>
+                    <i class="fa fa-ban fa-stack-2x"></i></span>&nbsp;&nbsp;Block User&emsp;</a>
+            <hr>
+        </div>
+
+        <!-- card for showing block user -->
+        <div class="col-md-9 mt-3">
+            <div class="container-md show_card">
+                <h3><b>Block user request</b></h3><br>
+                <div class="p-3 show_request"
+                    style="background-color: white; box-shadow: 0 0 4px 0 rgb(212, 212, 212);">
+                    <h4 class="mb-3">{{block_friends_detail|length}} Block Requests</h4>
+                    <hr>
+                    {% if block_friends_detail %}
+                    {% for block_friends_detail in block_friends_detail %}
+                    <img class="rounded-circle account-img" width="5px" height="5px"
+                        src="/static/profile_image/{{block_friends_detail.profile_image}}">
+                    <h6><a href='/username/{{block_friends_detail.id}}'
+                            style="text-decoration: none; color: #000; font-size: 18px;">{{block_friends_detail.firstname}}
+                            {{block_friends_detail.lastname}}</a>
+                        <span
+                            style="float: right;">{{block_friends_detail.request_sent_date.strftime('%Y-%m-%d')}}</span>
+                    </h6>
+                    9 mutual friends <br>
+                    <a href="/accept_block_friend_request/{{block_friends_detail.id}}" role="button"
+                        class="btn btn-primary btn-inline" style="width: 100%;">Confirm</a>
+                    <hr>
+                    {%endfor%}
+                    {% else %}
+                    <br>
+                    <div class="col-12 text-center">
+                        <h4>You have no block request</h4>
+                    </div><br>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

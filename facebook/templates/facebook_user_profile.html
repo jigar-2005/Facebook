@@ -1,0 +1,191 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<!-- style only for userprofile page -->
+<style>
+    .cover {
+        background-image: url("/static/cover_image/{{user.cover_image}}");
+        background-repeat: no-repeat;
+        background-attachment: cover;
+        background-size: 100% auto;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .user-profile {
+        margin-top: 22%;
+        border-radius: 100%;
+        border: 5px solid white;
+    }
+
+    #mymenu1 {
+        border-bottom: thick solid blue;
+    }
+
+    @media (min-width: 992px) {
+        .cover-profile {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .user_all_post {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+
+    .block img {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin: 0 1rem 0 0;
+    }
+
+    .profile-block img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin: -10px 1rem 0 0;
+    }
+
+    .post-user-profile img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin: 0px 1rem 0 0;
+    }
+
+    .img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user_post_comment {
+        width: 90%;
+        border: 1px solid #e6e7e9;
+        background: #F0F2F5;
+        border-radius: 15px;
+        font-size: 17px;
+        height: 40px;
+    }
+
+    @media (max-width: 550px) {
+        .user_post_comment {
+            width: 90%;
+            float: right;
+        }
+    }
+</style>
+
+<!-- for showing cover image, profile image and username and some menu type options -->
+<div style="background-color: #CAC2BB;">
+    <div class="container-md cover-profile">
+        <div class="cover">
+            <a href="/static/profile_image/{{user.profile_image}}">
+                <img class="user-profile" src="/static/profile_image/{{user.profile_image}}" width="180px"
+                    height="180px"></a>
+        </div>
+        <h1 class="username text-center mb-4">{{user.firstname}} {{user.lastname}}</h1>
+        <hr>
+        <a href="/username/{{user.id}}" id="mymenu1" class="btn profile_menu_btn1" onclick="Function1()"><b>Post</b></a>
+        <a href="/user_about/{{user.id}}" id="mymenu2" class="btn profile_menu_btn2"
+            onclick="Function2()"><b>About</b></a>
+        <a href="/user_friend/{{user.id}}" id="mymenu3" class="btn profile_menu_btn3"
+            onclick="Function3()"><b>Friends</b></a>
+        {% if detail %}
+        <a href="/addfriend{{user.id}}" style="float: right;" class="btn btn-secondary profile_menu_btn5 mx-2">Confirmed
+            Friends</a>
+        {% else %}
+        <a href="/addfriend{{user.id}}" style="float: right;" class="btn btn-secondary profile_menu_btn5 mx-2">Add
+            Friends</a>
+        {% endif %}
+    </div>
+</div>
+<br>
+
+
+
+<!-- card for showing user posts -->
+<div class="container-md user_all_post">
+    {% for user_post in user_post %}
+    <div class="card" style="border-radius: 10px;">
+        <div class="card-body">
+            <div class="post-user-profile">
+                <img class="rounded-circle post-user" src="/static/profile_image/{{user_post.User.profile_image}}">
+                <h6><a href='/username/{{user_post.User.id}}'
+                        style="text-decoration: none; color: #000; font-size: 18px;">{{user_post.User.firstname}}
+                        {{user_post.User.lastname}}</a>
+                </h6>
+                <p style="margin-top: -7px;">{{user_post.Post.date_posted.strftime('%Y-%m-%d')}}</p>
+                <a href="/post_with_like/{{user_post.Post.id}}" style="text-decoration: none; color: #000;">
+                    <p>{{user_post.Post.post_description}}</p>
+                </a>
+            </div>
+            {% if user_post.Post.post_image != "none" %}
+            <a href="/post_with_like/{{user_post.Post.id}}"><img
+                    src="/static/post_image_folder/{{user_post.Post.post_image}}" width="100%" height="auto"></a>
+            {% endif %}
+            <div>
+                <div class="row">
+                    <div class="col-6" style="float: left;">
+                        <h6 style="margin-top: 10px;"><a href="/post_with_like/{{user_post.Post.id}}"
+                                style="text-decoration: none; color: #000;">
+                                {% for like_count in like_count %}
+                                {% if like_count.id == user_post.Post.id %}
+                                🥰❤️🥰【{{like_count[1]}}】
+                                {% endif %}
+                                {% endfor %}
+                            </a>
+                        </h6>
+                    </div>
+                    <div class="col-6" style="float: right;">
+                        <h6><a href="/post_with_comment/{{user_post.Post.id}}"
+                                style="text-decoration: none; color: #000; float: right;">
+                                {% for comment_count in comment_count %}
+                                {% if comment_count.id == user_post.Post.id %}
+                                【{{comment_count[1]}}】Comment
+                                {% endif %}
+                                {% endfor %}
+                            </a>
+                        </h6>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <a href="/like{{user_post.Post.id}}" class="col-4 text-center reaction" role="button" style="border: none; text-decoration: none; color: black;
+                        {% for like_exists in like_exists %}
+                            {% if like_exists.Post.id == user_post.Post.id %}
+                            background: blue; color: white;
+                            {% endif %}
+                            {% endfor %}"><i class="fa fa-thumbs-o-up" style="font-size: 18px;"></i> Like</a>
+                    <a href="/post_with_comment/{{user_post.Post.id}}" class="col-4 text-center reaction" role="button"
+                        style="border: none; text-decoration: none; color: black;"><i class="fa fa-edit"
+                            style="font-size: 18px;"></i> Comment</a>
+                    <a href="#share" class="col-4 text-center reaction" role="button"
+                        style="border: none; text-decoration: none; color: black;"><i class="fa fa-share-square-o"
+                            style="font-size: 18px;"></i> Share</a>
+                </div>
+                <hr>
+                <div>
+                    <form method="POST" action="/post/{{user_post.Post.id}}/comment">
+                        <img class="img" src="/static/profile_image/{{myname.profile_image}}" />
+                        <input class="user_post_comment" name="comment_data" autofocus="autofocus" type="text"
+                            placeholder="Write a comment...">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+</div>
+
+<!-- js for changing borderbottom of menu when clicked -->
+<script>
+    function Function1() {
+        document.getElementById("mymenu1").style.borderBottom = "thick solid blue";
+        document.getElementById("mymenu2").style.borderBottom = "#CAC2BB";
+        document.getElementById("mymenu3").style.borderBottom = "#CAC2BB";
+    }
+</script>
+{% endblock %}

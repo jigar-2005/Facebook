@@ -1,0 +1,97 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<!-- style only for myfriends page -->
+<style>
+    .cover {
+        background-image: url("/static/cover_image/{{myname.cover_image}}");
+        background-repeat: no-repeat;
+        background-attachment: cover;
+        background-size: 100% auto;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    #mymenu3 {
+        border-bottom: thick solid blue;
+    }
+
+    .profile {
+        margin-top: 22%;
+        border-radius: 100%;
+        border: 5px solid white;
+    }
+
+    @media (min-width: 992px) {
+        .cover-profile {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .user_all_post {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .mutual_frd {
+            display: none;
+        }
+    }
+</style>
+
+<!-- for showing cover image, profile image and username and some menu type options -->
+<div style="background-color: #CAC2BB;">
+    <div class="container-md cover-profile">
+        <div class="cover">
+            <a href="/static/profile_image/{{myname.profile_image}}">
+                <img class="profile" src="/static/profile_image/{{myname.profile_image}}" width="180px"
+                    height="180px"></a>
+        </div>
+        <h1 class="username text-center mb-4">{{myname.firstname}} {{myname.lastname}}</h1>
+        <hr>
+        <a href="/myprofile" id="mymenu1" class="btn profile_menu_btn1" onclick="Function1()"><b>Post</b></a>
+        <a href="/myabout" id="mymenu2" class="btn profile_menu_btn2" onclick="Function2()"><b>About</b></a>
+        <a href="{{url_for('friends.myfriends')}}" id="mymenu3" class="btn profile_menu_btn3"
+            onclick="Function3()"><b>Friends</b></a>
+        <a href="/editprofile" style="float: right;" class="btn btn-secondary profile_menu_btn5 mx-2">Edit Profile</a>
+    </div>
+</div>
+
+<!-- card for shoing my friends -->
+<div class="container-md user_all_post mt-4">
+    <div class="card" style="border-radius: 10px;">
+        <h4><a href="{{url_for('friends.myfriends')}}"
+                style="text-decoration: none; color: black; margin-left: 20px;">Friends</a></h4>
+        <div class="row">
+            {% if my_friends_detail %}
+            {% for my_friends_detail in my_friends_detail %}
+            <div class="col-6 text-center"><br>
+                <img src="/static/profile_image/{{my_friends_detail.profile_image}}" width="80" height="80" alt=""><br>
+                <a href="/username/{{my_friends_detail.id}}"
+                    style="text-decoration: none; color: #000;">{{my_friends_detail.firstname}}
+                    {{my_friends_detail.lastname}}</a><br>
+                <a href="#mutual_frd" class="mutual_frd" style="text-decoration: none; color: #000;">14 Mutal Friend</a>
+            </div>
+            {%endfor%}
+            {% else %}
+            <br>
+            <div class="col-12 text-center">
+                <h4>*---- No friend ----*</h4>
+            </div><br>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- js for changing borderbottom of menu when clicked -->
+<script>
+    function Function3() {
+        document.getElementById("mymenu3").style.borderBottom = "thick solid blue";
+        document.getElementById("mymenu1").style.borderBottom = "#CAC2BB";
+        document.getElementById("mymenu2").style.borderBottom = "#CAC2BB";
+    }
+</script>
+
+{% endblock %}

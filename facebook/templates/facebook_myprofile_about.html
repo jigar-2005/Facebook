@@ -1,0 +1,394 @@
+{% extends "facebook_layout.html" %}
+{% block body %}
+
+<!-- style only for myabout page -->
+<style>
+    .cover {
+        background-image: url("/static/cover_image/{{myname.cover_image}}");
+        background-repeat: no-repeat;
+        background-attachment: cover;
+        background-size: 100% auto;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    #mymenu2 {
+        border-bottom: thick solid blue;
+    }
+
+    .block img {
+        width: 60px;
+        height: 60px;
+        float: left;
+        margin: 0 1rem 0 0;
+    }
+
+    .profile-block img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin: -10px 1rem 0 0;
+    }
+
+    .post-user-profile img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        margin: 0px 1rem 0 0;
+    }
+
+    .img {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .block {
+        width: 98%;
+        padding: 10px 20px;
+        font-size: 16px;
+        margin-left: 10px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #000;
+    }
+
+    #work_and_education_output {
+        display: none;
+    }
+
+    #place_lived_output {
+        display: none;
+    }
+
+    #contact_info_output {
+        display: none;
+    }
+
+    #relationship_output {
+        display: none;
+    }
+
+    #detail_output {
+        display: none;
+    }
+
+    #life_event_output {
+        display: none;
+    }
+
+    .block:active {
+        color: blue;
+    }
+
+    .block:hover {
+        background-color: #e9e8fa;
+        color: #000;
+    }
+
+    .about_heading {
+        margin-left: 30px;
+        margin-bottom: 0px;
+        font-size: 24px;
+    }
+
+    .profile {
+        margin-top: 22%;
+        border-radius: 100%;
+        border: 5px solid white;
+    }
+
+
+    @media (min-width: 992px) {
+        .cover-profile {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+
+        .user_all_post {
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .options {
+            border-right: 1px solid grey;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .options {
+            border-bottom: 1px solid grey;
+            width: 92%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about_heading {
+            margin-left: 0;
+        }
+
+        .block {
+            margin-left: 0;
+            padding-left: 0;
+        }
+    }
+</style>
+
+<!-- for showing cover image, profile image and username and some menu type options -->
+<div style="background-color: #CAC2BB;">
+    <div class="container-md cover-profile">
+        <div class="cover">
+            <a href="/static/profile_image/{{myname.profile_image}}">
+                <img class="profile" src="/static/profile_image/{{myname.profile_image}}" width="180px"
+                    height="180px"></a>
+        </div>
+        <h1 class="username text-center mb-4">{{myname.firstname}} {{myname.lastname}}</h1>
+        <hr>
+        <a href="/myprofile" id="mymenu1" class="btn profile_menu_btn1" onclick="Function1()"><b>Post</b></a>
+        <a href="/myabout" id="mymenu2" class="btn profile_menu_btn2" onclick="Function2()"><b>About</b></a>
+        <a href="{{url_for('friends.myfriends')}}" id="mymenu3" class="btn profile_menu_btn3"
+            onclick="Function3()"><b>Friends</b></a>
+        <a href="/editprofile" style="float: right;" class="btn btn-secondary profile_menu_btn5 mx-2">Edit Profile</a>
+    </div>
+</div>
+<br>
+
+<!-- my about option and output show -->
+<div class="container-md user_all_post">
+    <div class="card" style="border-radius: 10px;">
+        <div class="row">
+            <div class="col-md-4 options">
+                <b class="about_heading">About</b>
+                <a href="#" type="button" onclick="show_overview()" id="block1" class="block"
+                    style="background-color: #e9e8fa;">OverView</a>
+                <a href="#" type="button" onclick="show_work_and_education()" id="block2" class="block">Work and
+                    Education</a>
+                <a href="#" type="button" onclick="show_placed_lived()" class="block" id="block3">Places lived</a>
+                <a href="#" type="button" onclick="show_contact_info()" class="block" id="block4">Contact and basis
+                    info</a>
+                <a href="#" type="button" onclick="show_relationship()" class="block" id="block5">Family and
+                    relationship</a>
+                <a href="#" type="button" onclick="show_detail()" class="block" id="block6">Details about akash</a>
+                <a href="#" type="button" onclick="show_life_event()" class="block" id="block7">Life event</a>
+            </div>
+            <div class="col-md-8 output mt-3">
+                <div id="overview_output">
+                    <p style="color: grey;" class="mt-4 mx-3"><i class="fa fa-briefcase"
+                            style="font-size: 24px;"></i>&ensp;
+                        No workplace to show</p>
+                    <p style="color: grey;" class="mt-4 mx-3"><i class="fa fa-graduation-cap"
+                            style="font-size: 24px;"></i>&nbsp; No schools/universities to show</p>
+                    <p style="color: grey;" class="mt-4 mx-3"><i class="fa fa-home" style="font-size: 24px;"></i>&ensp;
+                        Lives in <a href="#agra" style="text-decoration: none; color: grey;">Agra, Uttar Pradesh</a></p>
+                    <p style="color: grey;" class="mt-4 mx-3">&nbsp;<i class="fa fa-map-marker"
+                            style="font-size: 24px;"></i>&ensp;&nbsp; From <a href="#agra"
+                            style="text-decoration: none; color: grey;">Agra, Uttar Pradesh</p>
+                    <p style="color: grey;" class="mt-4 mx-3"><i class="fa fa-heart" style="font-size: 24px;"></i>&ensp;
+                        No
+                        relationship info to show</p>
+                </div>
+
+                <div id="work_and_education_output">
+                    <h5 class="mx-3" style="color: black;">Work</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-briefcase"
+                            style="font-size: 24px;"></i>&ensp;
+                        No workplace to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">University</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-graduation-cap"
+                            style="font-size: 24px;"></i>&nbsp; No schools/universities to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">High School</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-graduation-cap"
+                            style="font-size: 24px;"></i>&nbsp; No schools/universities to show</p>
+                </div>
+
+                <div id="place_lived_output">
+                    <h5 class="mx-3" style="color: black;">Placed Lived</h5>
+                    <p style="float: left;"><img style="border-radius: 100%;"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY33GaW3Jfvib_qEwbSB8KIaKs2_l6hH4p9855AXKYWA6HKslHr90d8-sn-pjVQHMcnAY&usqp=CAU"
+                            height="50px" width="50px"></p>
+                    <p><a href="#" style="color: black; text-decoration: none;"> &ensp; Agra, Uttar Pradesh</a><br>
+                        &ensp;Current
+                        town/city</p>
+                    <br>
+                    <p style="float: left;"><img style="border-radius: 100%;"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY33GaW3Jfvib_qEwbSB8KIaKs2_l6hH4p9855AXKYWA6HKslHr90d8-sn-pjVQHMcnAY&usqp=CAU"
+                            height="50px" width="50px"></p>
+                    <p><a href="#" style="color: black; text-decoration: none;"> &ensp; Agra, Uttar Pradesh</a><br>
+                        &ensp;Home Town</p>
+                </div>
+
+                <div id="contact_info_output">
+                    <h5 class="mx-3" style="color: black;">Contact info</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-address-card"
+                            style="font-size:24px"></i>&ensp;
+                        No contact info to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">Websites and social links</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-link" style="font-size:24px"
+                            aria-hidden="true"></i>&nbsp; No links to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">Basic info</h5>
+                    <p style="float: left; color: grey;" class="mt-2 mx-3"><i class="fa fa-user"
+                            style="font-size:24px"></i></p>
+                    <p style="font-size: small; color: grey;">Male<br>Gender</p> <br>
+                    <p style="float: left; color: grey;" class="mt-2 mx-3"><i class="fa fa-birthday-cake"
+                            style="font-size:24px"></i></p>
+                    <p style="font-size: small; color: grey;">12 July<br>Birthday</p>
+                </div>
+
+                <div id="relationship_output">
+                    <h5 class="mx-3" style="color: black;">Relationship</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-heart" style="font-size:24px"></i>&ensp;
+                        No relationship info to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">Family members</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-tree" style="font-size:24px"></i>&nbsp; No
+                        family members to show</p>
+                </div>
+
+                <div id="detail_output">
+                    <h5 class="mx-3" style="color: black;">About Akash</h5>
+                    <p style="color: grey;" class="mt-2 mx-3">Melody Khao khud jaan jaao :P</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">Name pronunciation</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-headphones"
+                            style="font-size:24px"></i>&nbsp; No name pronunciation to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">Other names</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-user-circle-o"
+                            style="font-size:24px"></i>&nbsp; No other names to show</p>
+                    <h5 class="mt-4 mx-3" style="color: black;">Favourite Quotes</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-quote-left"
+                            style="font-size:24px"></i>&nbsp; No favourite quotes to show</p>
+                </div>
+
+                <div id="life_event_output">
+                    <h5 class="mx-3" style="color: black;">Life events</h5>
+                    <p style="color: grey;" class="mt-2 mx-3"><i class="fa fa-star" style="font-size:24px"></i>&nbsp; No
+                        life events to show</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<!-- js for changing borderbottom of menu when clicked -->
+<script>
+    function Function2() {
+        document.getElementById("mymenu2").style.borderBottom = "thick solid blue";
+        document.getElementById("mymenu1").style.borderBottom = "#CAC2BB";
+        document.getElementById("mymenu3").style.borderBottom = "#CAC2BB";
+    }
+    function show_overview() {
+        document.getElementById("overview_output").style.display = "block";
+        document.getElementById("block1").style.background = "#e9e8fa";
+        document.getElementById("block2").style.background = "white";
+        document.getElementById("block3").style.background = "white";
+        document.getElementById("block4").style.background = "white";
+        document.getElementById("block5").style.background = "white";
+        document.getElementById("block6").style.background = "white";
+        document.getElementById("block7").style.background = "white";
+        document.getElementById("work_and_education_output").style.display = "none";
+        document.getElementById("place_lived_output").style.display = "none";
+        document.getElementById("contact_info_output").style.display = "none";
+        document.getElementById("relationship_output").style.display = "none";
+        document.getElementById("detail_output").style.display = "none";
+        document.getElementById("life_event_output").style.display = "none";
+    }
+    function show_work_and_education() {
+        document.getElementById("work_and_education_output").style.display = "block";
+        document.getElementById("block2").style.background = "#e9e8fa";
+        document.getElementById("block1").style.background = "white";
+        document.getElementById("block3").style.background = "white";
+        document.getElementById("block4").style.background = "white";
+        document.getElementById("block5").style.background = "white";
+        document.getElementById("block6").style.background = "white";
+        document.getElementById("block7").style.background = "white";
+        document.getElementById("overview_output").style.display = "none";
+        document.getElementById("place_lived_output").style.display = "none";
+        document.getElementById("contact_info_output").style.display = "none";
+        document.getElementById("relationship_output").style.display = "none";
+        document.getElementById("detail_output").style.display = "none";
+        document.getElementById("life_event_output").style.display = "none";
+    }
+    function show_placed_lived() {
+        document.getElementById("place_lived_output").style.display = "block";
+        document.getElementById("block3").style.background = "#e9e8fa";
+        document.getElementById("block1").style.background = "white";
+        document.getElementById("block2").style.background = "white";
+        document.getElementById("block4").style.background = "white";
+        document.getElementById("block5").style.background = "white";
+        document.getElementById("block6").style.background = "white";
+        document.getElementById("block7").style.background = "white";
+        document.getElementById("work_and_education_output").style.display = "none";
+        document.getElementById("overview_output").style.display = "none";
+        document.getElementById("contact_info_output").style.display = "none";
+        document.getElementById("detail_output").style.display = "none";
+        document.getElementById("relationship_output").style.display = "none";
+        document.getElementById("life_event_output").style.display = "none";
+    }
+    function show_contact_info() {
+        document.getElementById("contact_info_output").style.display = "block";
+        document.getElementById("block4").style.background = "#e9e8fa";
+        document.getElementById("block1").style.background = "white";
+        document.getElementById("block2").style.background = "white";
+        document.getElementById("block3").style.background = "white";
+        document.getElementById("block5").style.background = "white";
+        document.getElementById("block6").style.background = "white";
+        document.getElementById("block7").style.background = "white";
+        document.getElementById("work_and_education_output").style.display = "none";
+        document.getElementById("overview_output").style.display = "none";
+        document.getElementById("place_lived_output").style.display = "none";
+        document.getElementById("detail_output").style.display = "none";
+        document.getElementById("relationship_output").style.display = "none";
+        document.getElementById("life_event_output").style.display = "none";
+    }
+    function show_relationship() {
+        document.getElementById("relationship_output").style.display = "block";
+        document.getElementById("block5").style.background = "#e9e8fa";
+        document.getElementById("block1").style.background = "white";
+        document.getElementById("block2").style.background = "white";
+        document.getElementById("block3").style.background = "white";
+        document.getElementById("block4").style.background = "white";
+        document.getElementById("block6").style.background = "white";
+        document.getElementById("block7").style.background = "white";
+        document.getElementById("work_and_education_output").style.display = "none";
+        document.getElementById("overview_output").style.display = "none";
+        document.getElementById("place_lived_output").style.display = "none";
+        document.getElementById("detail_output").style.display = "none";
+        document.getElementById("contact_info_output").style.display = "none";
+        document.getElementById("life_event_output").style.display = "none";
+    }
+    function show_detail() {
+        document.getElementById("detail_output").style.display = "block";
+        document.getElementById("block6").style.background = "#e9e8fa";
+        document.getElementById("block1").style.background = "white";
+        document.getElementById("block2").style.background = "white";
+        document.getElementById("block3").style.background = "white";
+        document.getElementById("block4").style.background = "white";
+        document.getElementById("block5").style.background = "white";
+        document.getElementById("block7").style.background = "white";
+        document.getElementById("work_and_education_output").style.display = "none";
+        document.getElementById("overview_output").style.display = "none";
+        document.getElementById("place_lived_output").style.display = "none";
+        document.getElementById("relationship_output").style.display = "none";
+        document.getElementById("contact_info_output").style.display = "none";
+        document.getElementById("life_event_output").style.display = "none";
+    }
+    function show_life_event() {
+        document.getElementById("life_event_output").style.display = "block";
+        document.getElementById("block7").style.background = "#e9e8fa";
+        document.getElementById("block1").style.background = "white";
+        document.getElementById("block2").style.background = "white";
+        document.getElementById("block3").style.background = "white";
+        document.getElementById("block4").style.background = "white";
+        document.getElementById("block5").style.background = "white";
+        document.getElementById("block6").style.background = "white";
+        document.getElementById("work_and_education_output").style.display = "none";
+        document.getElementById("overview_output").style.display = "none";
+        document.getElementById("place_lived_output").style.display = "none";
+        document.getElementById("relationship_output").style.display = "none";
+        document.getElementById("contact_info_output").style.display = "none";
+        document.getElementById("detail_output").style.display = "none";
+    }
+</script>
+{% endblock %}
